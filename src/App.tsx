@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Atom, BookOpen, Trophy, Users, ChevronRight, Play, Clock, Star, Target, Zap, Award } from 'lucide-react';
+import { ThemeProvider } from './contexts/ThemeContext';
 import HomePage from './components/HomePage';
 import ProblemsPage from './components/ProblemsPage';
 import ProblemView from './components/ProblemView';
@@ -35,10 +35,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <Navigation currentPage={currentPage} onNavigate={handlePageChange} />
-      {renderCurrentPage()}
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen transition-colors">
+        <Navigation currentPage={currentPage} onNavigate={handlePageChange} />
+        {renderCurrentPage()}
+      </div>
+    </ThemeProvider>
   );
 }
 
