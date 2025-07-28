@@ -42,19 +42,20 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     { name: 'Optics', problems: 156, color: 'from-cyan-500 to-blue-500', icon: '🔍', description: 'Wave optics, interference, polarization, lasers' },
     { name: 'Fluid Mechanics', problems: 92, color: 'from-blue-400 to-cyan-400', icon: '🌊', description: 'Fluid statics, dynamics, turbulence, viscosity' },
     { name: 'Plasma Physics', problems: 67, color: 'from-orange-400 to-red-400', icon: '⚡', description: 'Ionized gases, magnetic confinement, fusion' },
-    { name: 'Biophysics', problems: 78, color: 'from-green-400 to-emerald-400', icon: '🧬', description: 'Molecular motors, membrane physics, protein folding' }
+    { name: 'Biophysics', problems: 78, color: 'from-green-400 to-emerald-400', icon: '🧬', description: 'Molecular motors, membrane physics, protein folding' },
+  { name: 'Solar Physics', problems: 60, color: 'from-yellow-200 to-red-400', icon: '☀️', description: 'Solar Plasma, Corona, Magnetosphere' }
   ];
 
   const features = [
     {
       icon: Target,
       title: 'Topic-wise Practice',
-      description: 'Master physics concepts with problems organized by classical mechanics, E&M, quantum, and more.',
+      description: 'Daily practice physics concepts with problems organized by classical mechanics, E&M, quantum, and more.',
     },
     {
       icon: Trophy,
       title: 'Difficulty Levels',
-      description: 'Progress from easy undergraduate problems to challenging graduate-level and research questions.',
+      description: 'Progress from easy high-school problems to challenging post-graduate-level and research questions.',
     },
     {
       icon: Brain,
@@ -69,9 +70,8 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   ];
 
   const stats = [
-    { label: 'Total Problems', value: '900+', icon: BookOpen },
-    { label: 'Active Users', value: '12K+', icon: Users },
-    { label: 'Universities', value: '50+', icon: Award },
+    { label: 'Total Problems', value: '700+', icon: BookOpen },
+    { label: 'Active Users', value: '1K+', icon: Users },
     { label: 'Success Rate', value: '89%', icon: CheckCircle },
   ];
 
@@ -79,13 +79,13 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     <div className={`min-h-screen transition-colors ${
       isDarkMode ? 'bg-slate-900' : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'
     }`}>
-      {/* Hero Section */}
+      {/* Hero Section}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div className="text-center">
           <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Zap className="w-4 h-4" />
             <span>The LeetCode for Physics Students</span>
-          </div>
+          </div>*/
           
           <h1 className={`text-5xl md:text-6xl font-bold mb-6 leading-tight transition-colors ${
             isDarkMode ? 'text-white' : 'text-slate-900'
