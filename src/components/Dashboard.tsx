@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Target, Clock, TrendingUp, Calendar, Award, Zap, BookOpen, Users, Star, Medal, Crown, ChevronUp, ChevronDown } from 'lucide-react';
+import { Trophy, Target, Clock, TrendingUp, Calendar, Award, Zap, BookOpen, Users, Star, Medal, Crown, ChevronUp, ChevronDown, Activity } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -7,13 +7,13 @@ const Dashboard: React.FC = () => {
   // User progress data
   const userStats = {
     totalSolved: 47,
-    totalProblems: 900,
+    totalProblems: 1800,
     easySolved: 25,
-    easyTotal: 400,
+    easyTotal: 800,
     mediumSolved: 18,
-    mediumTotal: 350,
+    mediumTotal: 700,
     hardSolved: 4,
-    hardTotal: 150,
+    hardTotal: 300,
     currentLevel: 12,
     currentXP: 2340,
     xpToNextLevel: 2500,
@@ -61,12 +61,19 @@ const Dashboard: React.FC = () => {
   ];
 
   const topicProgress = [
-    { topic: 'Classical Mechanics', solved: 15, total: 25, progress: 60, xp: 275 },
-    { topic: 'Electromagnetism', solved: 12, total: 20, progress: 60, xp: 220 },
-    { topic: 'Quantum Mechanics', solved: 8, total: 18, progress: 44, xp: 150 },
-    { topic: 'Thermodynamics', solved: 7, total: 15, progress: 47, xp: 125 },
-    { topic: 'Statistical Mechanics', solved: 3, total: 12, progress: 25, xp: 75 },
-    { topic: 'Nuclear Physics', solved: 2, total: 10, progress: 20, xp: 50 },
+    { topic: 'Classical Mechanics', solved: 15, total: 25, progress: 60, xp: 275, rank: 'Expert' },
+    { topic: 'Electromagnetism', solved: 12, total: 20, progress: 60, xp: 220, rank: 'Advanced' },
+    { topic: 'Quantum Mechanics', solved: 8, total: 18, progress: 44, xp: 150, rank: 'Intermediate' },
+    { topic: 'Thermodynamics', solved: 7, total: 15, progress: 47, xp: 125, rank: 'Intermediate' },
+    { topic: 'Electrodynamics', solved: 5, total: 16, progress: 31, xp: 100, rank: 'Beginner' },
+    { topic: 'Atomic Physics', solved: 4, total: 14, progress: 29, xp: 85, rank: 'Beginner' },
+    { topic: 'Particle Physics', solved: 3, total: 17, progress: 18, xp: 75, rank: 'Beginner' },
+    { topic: 'Nuclear Physics', solved: 2, total: 12, progress: 17, xp: 50, rank: 'Beginner' },
+    { topic: 'Statistical Mechanics', solved: 3, total: 12, progress: 25, xp: 75, rank: 'Beginner' },
+    { topic: 'Special Relativity', solved: 1, total: 9, progress: 11, xp: 25, rank: 'Novice' },
+    { topic: 'General Relativity', solved: 0, total: 8, progress: 0, xp: 0, rank: 'Novice' },
+    { topic: 'Astronomy', solved: 2, total: 11, progress: 18, xp: 45, rank: 'Beginner' },
+    { topic: 'Astrophysics', solved: 1, total: 13, progress: 8, xp: 25, rank: 'Novice' },
   ];
 
   const leaderboard = [
@@ -87,8 +94,72 @@ const Dashboard: React.FC = () => {
     { title: 'Hard Hitter', description: 'Solve 10 hard problems', icon: '💪', unlocked: false, xp: 500 },
   ];
 
+  // Generate contribution grid data (GitHub-style)
+  const generateContributionData = () => {
+    const data = [];
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - 364); // 52 weeks
+
+    for (let i = 0; i < 365; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      
+      // Simulate random activity with some patterns
+      let count = 0;
+      const dayOfWeek = date.getDay();
+      const random = Math.random();
+      
+      // More activity on weekdays, less on weekends
+      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+        if (random < 0.7) count = Math.floor(Math.random() * 5) + 1;
+      } else {
+        if (random < 0.4) count = Math.floor(Math.random() * 3) + 1;
+      }
+      
+      data.push({
+        date: date.toISOString().split('T')[0],
+        count,
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear()
+      });
+    }
+    return data;
+  };
+
+  const contributionData = generateContributionData();
+  const totalContributions = contributionData.reduce((sum, day) => sum + day.count, 0);
+
+  const getContributionColor = (count: number) => {
+    if (count === 0) return 'bg-slate-100';
+    if (count <= 2) return 'bg-green-200';
+    if (count <= 4) return 'bg-green-400';
+    if (count <= 6) return 'bg-green-600';
+    return 'bg-green-800';
+  };
+
+  const getContributionIntensity = (count: number) => {
+    if (count === 0) return 'No problems solved';
+    if (count <= 2) return `${count} problem${count > 1 ? 's' : ''} solved`;
+    if (count <= 4) return `${count} problems solved`;
+    if (count <= 6) return `${count} problems solved - Great day!`;
+    return `${count} problems solved - Amazing!`;
+  };
+
   const currentLevelInfo = getLevelTitle(userStats.currentLevel);
   const xpProgress = ((userStats.currentXP % 200) / 200) * 100;
+
+  const getRankColor = (rank: string) => {
+    switch (rank) {
+      case 'Expert': return 'text-purple-600 bg-purple-50';
+      case 'Advanced': return 'text-blue-600 bg-blue-50';
+      case 'Intermediate': return 'text-green-600 bg-green-50';
+      case 'Beginner': return 'text-orange-600 bg-orange-50';
+      case 'Novice': return 'text-gray-600 bg-gray-50';
+      default: return 'text-slate-600 bg-slate-50';
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -157,7 +228,8 @@ const Dashboard: React.FC = () => {
         <nav className="flex space-x-8">
           {[
             { id: 'overview', label: 'Overview', icon: Target },
-            { id: 'progress', label: 'Progress', icon: TrendingUp },
+            { id: 'stats', label: 'Topic Stats', icon: TrendingUp },
+            { id: 'contributions', label: 'Contributions', icon: Activity },
             { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
             { id: 'achievements', label: 'Achievements', icon: Award }
           ].map((tab) => {
@@ -203,47 +275,6 @@ const Dashboard: React.FC = () => {
             })}
           </div>
 
-          {/* Recent Activity */}
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
-            <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                  <div className={`w-3 h-3 rounded-full ${
-                    activity.status === 'Solved' ? 'bg-green-400' : 'bg-orange-400'
-                  }`}></div>
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900">{activity.problem}</div>
-                    <div className="text-sm text-slate-500">{activity.time}</div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      activity.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
-                      activity.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
-                      {activity.difficulty}
-                    </span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      activity.status === 'Solved' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
-                    }`}>
-                      {activity.status}
-                    </span>
-                    {activity.xp > 0 && (
-                      <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">
-                        +{activity.xp} XP
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'progress' && (
-        <div className="space-y-8">
           {/* Problem Solving Progress */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-6">Problem Solving Progress</h3>
@@ -311,17 +342,66 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
+          {/* Recent Activity */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
+            <div className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-center space-x-3 p-3 hover:bg-slate-50 rounded-lg transition-colors">
+                  <div className={`w-3 h-3 rounded-full ${
+                    activity.status === 'Solved' ? 'bg-green-400' : 'bg-orange-400'
+                  }`}></div>
+                  <div className="flex-1">
+                    <div className="font-medium text-slate-900">{activity.problem}</div>
+                    <div className="text-sm text-slate-500">{activity.time}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      activity.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                      activity.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {activity.difficulty}
+                    </span>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      activity.status === 'Solved' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                    }`}>
+                      {activity.status}
+                    </span>
+                    {activity.xp > 0 && (
+                      <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">
+                        +{activity.xp} XP
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'stats' && (
+        <div className="space-y-8">
           {/* Topic Progress */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Topic Progress</h3>
-            <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-slate-900 mb-6">Physics Topics Progress</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {topicProgress.map((topic, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-slate-700">{topic.topic}</span>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm text-slate-500">{topic.solved}/{topic.total}</span>
-                      <span className="text-xs text-blue-600 font-medium">{topic.xp} XP</span>
+                <div key={index} className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="font-medium text-slate-900">{topic.topic}</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-sm text-slate-500">{topic.solved}/{topic.total} solved</span>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${getRankColor(topic.rank)}`}>
+                          {topic.rank}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-blue-600">{topic.xp} XP</div>
+                      <div className="text-xs text-slate-500">{topic.progress}%</div>
                     </div>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
@@ -330,9 +410,130 @@ const Dashboard: React.FC = () => {
                       style={{ width: `${topic.progress}%` }}
                     ></div>
                   </div>
-                  <div className="text-xs text-slate-500 mt-1">{topic.progress}% complete</div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Topic Rankings */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-6">Your Topic Rankings</h3>
+            <div className="space-y-4">
+              {topicProgress
+                .sort((a, b) => b.xp - a.xp)
+                .slice(0, 5)
+                .map((topic, index) => (
+                  <div key={index} className="flex items-center space-x-4 p-3 bg-slate-50 rounded-lg">
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
+                      index === 0 ? 'bg-yellow-100 text-yellow-700' :
+                      index === 1 ? 'bg-gray-100 text-gray-700' :
+                      index === 2 ? 'bg-orange-100 text-orange-700' :
+                      'bg-slate-100 text-slate-600'
+                    }`}>
+                      #{index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-slate-900">{topic.topic}</div>
+                      <div className="text-sm text-slate-500">{topic.solved} problems solved</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-blue-600">{topic.xp} XP</div>
+                      <div className={`text-xs px-2 py-1 rounded ${getRankColor(topic.rank)}`}>
+                        {topic.rank}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'contributions' && (
+        <div className="space-y-8">
+          {/* Contribution Overview */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                  {totalContributions} problems solved in the last year
+                </h3>
+                <p className="text-slate-600">
+                  Your daily problem-solving activity • Current streak: {userStats.streak} days
+                </p>
+              </div>
+              <div className="mt-4 lg:mt-0 flex items-center space-x-4 text-sm text-slate-500">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-slate-100 rounded-sm"></div>
+                  <span>Less</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-green-200 rounded-sm"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
+                  <div className="w-3 h-3 bg-green-600 rounded-sm"></div>
+                  <div className="w-3 h-3 bg-green-800 rounded-sm"></div>
+                </div>
+                <span>More</span>
+              </div>
+            </div>
+
+            {/* Contribution Grid */}
+            <div className="overflow-x-auto">
+              <div className="inline-block min-w-full">
+                <div className="grid grid-cols-53 gap-1 text-xs">
+                  {/* Month labels */}
+                  <div className="col-span-53 grid grid-cols-53 gap-1 mb-2">
+                    {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, index) => (
+                      <div key={month} className={`text-slate-500 text-center ${index === 0 ? 'col-start-1' : ''}`} style={{gridColumn: `${Math.floor(index * 4.4) + 1} / span 4`}}>
+                        {month}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Day labels */}
+                  <div className="col-span-1 grid grid-rows-7 gap-1 text-slate-500 text-right pr-2">
+                    <div></div>
+                    <div>Mon</div>
+                    <div></div>
+                    <div>Wed</div>
+                    <div></div>
+                    <div>Fri</div>
+                    <div></div>
+                  </div>
+
+                  {/* Contribution squares */}
+                  <div className="col-span-52 grid grid-cols-52 gap-1">
+                    {contributionData.map((day, index) => (
+                      <div
+                        key={index}
+                        className={`w-3 h-3 rounded-sm ${getContributionColor(day.count)} hover:ring-2 hover:ring-blue-300 cursor-pointer transition-all`}
+                        title={`${day.date}: ${getContributionIntensity(day.count)}`}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contribution Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+              <div className="text-2xl font-bold text-slate-900 mb-1">{totalContributions}</div>
+              <div className="text-sm text-slate-600">Total Problems Solved</div>
+              <div className="text-xs text-green-600 mt-1">This Year</div>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+              <div className="text-2xl font-bold text-slate-900 mb-1">{userStats.streak}</div>
+              <div className="text-sm text-slate-600">Current Streak</div>
+              <div className="text-xs text-orange-600 mt-1">Days</div>
+            </div>
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+              <div className="text-2xl font-bold text-slate-900 mb-1">
+                {Math.round(totalContributions / 52)}
+              </div>
+              <div className="text-sm text-slate-600">Average per Week</div>
+              <div className="text-xs text-blue-600 mt-1">Problems</div>
             </div>
           </div>
         </div>

@@ -24,10 +24,17 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const topics = [
     { name: 'Classical Mechanics', problems: 247, color: 'from-blue-500 to-cyan-500', icon: '⚖️' },
     { name: 'Electromagnetism', problems: 189, color: 'from-purple-500 to-pink-500', icon: '⚡' },
-    { name: 'Quantum Mechanics', problems: 156, color: 'from-indigo-500 to-purple-500', icon: '🔬' },
-    { name: 'Thermodynamics', problems: 134, color: 'from-orange-500 to-red-500', icon: '🌡️' },
+    { name: 'Electrodynamics', problems: 156, color: 'from-violet-500 to-purple-500', icon: '🌊' },
+    { name: 'Quantum Mechanics', problems: 198, color: 'from-indigo-500 to-purple-500', icon: '🔬' },
+    { name: 'Atomic Physics', problems: 134, color: 'from-emerald-500 to-teal-500', icon: '⚛️' },
+    { name: 'Particle Physics', problems: 167, color: 'from-pink-500 to-rose-500', icon: '🔬' },
+    { name: 'Nuclear Physics', problems: 123, color: 'from-red-500 to-pink-500', icon: '☢️' },
+    { name: 'Thermodynamics', problems: 145, color: 'from-orange-500 to-red-500', icon: '🌡️' },
     { name: 'Statistical Mechanics', problems: 98, color: 'from-green-500 to-teal-500', icon: '📊' },
-    { name: 'Nuclear Physics', problems: 76, color: 'from-red-500 to-pink-500', icon: '☢️' },
+    { name: 'Special Relativity', problems: 89, color: 'from-yellow-500 to-orange-500', icon: '⚡' },
+    { name: 'General Relativity', problems: 76, color: 'from-gray-600 to-slate-600', icon: '🌌' },
+    { name: 'Astronomy', problems: 112, color: 'from-blue-600 to-indigo-600', icon: '🌟' },
+    { name: 'Astrophysics', problems: 134, color: 'from-purple-600 to-indigo-700', icon: '🚀' },
   ];
 
   const features = [

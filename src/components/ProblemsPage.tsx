@@ -22,8 +22,9 @@ const ProblemsPage: React.FC<ProblemsPageProps> = ({ onProblemSelect }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const topics = [
-    'All', 'Classical Mechanics', 'Electromagnetism', 'Quantum Mechanics', 
-    'Thermodynamics', 'Statistical Mechanics', 'Nuclear Physics'
+    'All', 'Classical Mechanics', 'Electromagnetism', 'Electrodynamics', 'Quantum Mechanics', 
+    'Atomic Physics', 'Particle Physics', 'Nuclear Physics', 'Thermodynamics', 
+    'Statistical Mechanics', 'Special Relativity', 'General Relativity', 'Astronomy', 'Astrophysics'
   ];
 
   const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
